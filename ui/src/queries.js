@@ -167,3 +167,23 @@ export const GET_ADDRESS_GRAPHS = {
     }
   `
 };
+
+export const GET_USER_BY_ID_GRAPHS = {
+  level1: gql`
+    query queryUserById($userId: String) {
+      User(_id: $userId) {
+        _id
+        cluster_id
+        amount_received
+        sendTo {
+          cluster_id
+          amount_received
+        }
+        receiveFrom {
+          cluster_id
+          amount_received
+        }
+      }
+    }
+  `
+};

@@ -1,7 +1,15 @@
 type Address {
+  _id: String
   address: String!
   amount_received: Float
   sendTo: [Address] @relation(name: "Transaction", direction: OUT)
   receiveFrom: [Address] @relation(name: "Transaction", direction: IN)
-  # actors: [Person] @relation(name: "Transaction", direction: IN)
+}
+
+type User {
+  _id: String
+  cluster_id: String!
+  amount_received: Float
+  sendTo: [User] @relation(name: "Transaction", direction: OUT)
+  receiveFrom: [User] @relation(name: "Transaction", direction: IN)
 }

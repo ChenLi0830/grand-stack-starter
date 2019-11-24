@@ -1,6 +1,52 @@
-[![Deploy to now](https://deploy.now.sh/static/button.svg)](https://deploy.now.sh/?repo=https://github.com/grand-stack/grand-stack-starter&env=NEO4J_USER&env=NEO4J_URI&env=NEO4J_PASSWORD)
+# Block Space MonoRepo - Graphql hosting + UI
 
-# GRANDstack Starter
+This monorepo is started from `GRANDstack Starter`. If there is anything unclear about the dependency install / service start, you can get more details by visiting their [official README](https://github.com/grand-stack/grand-stack-starter).
+
+## DEV - GraphQL Server
+
+1. Setup local Neo4J database (port: 7687, password: letmein), if you haven't done so already, seed the database using `graph.db.dump`.
+1. Install plugin `APOC` for the local database
+1. Setup local graphql server
+   ```
+   cd ./api
+   npm install
+   npm start
+   ```
+1. Visit http://localhost:4001/graphql/.
+1. Copy & Paste the following query to verify it's working.
+   ```graphql
+   query queryUserById {
+     User(_id: "29850") {
+       _id
+       cluster_id
+       amount_received
+       sendTo {
+         cluster_id
+         amount_received
+       }
+       receiveFrom {
+         cluster_id
+         amount_received
+       }
+     }
+   }
+   ```
+
+## DEV - UI
+
+1. Install dependencies and start server
+   ```
+   cd ./ui
+   npm install
+   npm start
+   ```
+1. `cd ./ui && npm start`
+
+![](img/default-app.png)
+
+---
+
+# Original GRANDstack Starter README
 
 This project is a starter for building a [GRANDstack](https://grandstack.io) (GraphQL, React, Apollo, Neo4j Database) application. There are two components to the starter, the UI application (a React app) and the API app (GraphQL server).
 
@@ -12,18 +58,20 @@ This project is a starter for building a [GRANDstack](https://grandstack.io) (Gr
 
 You need a Neo4j instance, e.g. a [Neo4j Sandbox](http://neo4j.com/sandbox), a local instance via [Neo4j Desktop](https://neo4j.com/download), [Docker](http://hub.docker.com/_/neo4j) or a [Neo4j instance on AWS, Azure or GCP](http://neo4j.com/developer/guide-cloud-deployment) or [Neo4j Cloud](http://neo4j.com/cloud)
 
-For schemas using the  `@cypher` directive (as in this repo) via [`neo4j-graphql-js`](https://github.com/neo4j-graphql/neo4j-graphql-js), you need to have the [APOC library](https://github.com/neo4j-contrib/neo4j-apoc-procedures) installed, which should be automatic in Sandbox, Cloud and is a single click install in Neo4j Desktop. If when using the Sandbox / cloud you encounter an issue where an error similar to `Can not be converted to long: org.neo4j.kernel.impl.core.NodeProxy, Location: [object Object], Path: users` appears in the console when running the React app, try installing and using Neo4j locally instead.
+For schemas using the `@cypher` directive (as in this repo) via [`neo4j-graphql-js`](https://github.com/neo4j-graphql/neo4j-graphql-js), you need to have the [APOC library](https://github.com/neo4j-contrib/neo4j-apoc-procedures) installed, which should be automatic in Sandbox, Cloud and is a single click install in Neo4j Desktop. If when using the Sandbox / cloud you encounter an issue where an error similar to `Can not be converted to long: org.neo4j.kernel.impl.core.NodeProxy, Location: [object Object], Path: users` appears in the console when running the React app, try installing and using Neo4j locally instead.
 
 #### Sandbox setup
+
 A good tutorial can be found here: https://www.youtube.com/watch?v=rPC71lUhK_I
 
 #### Local setup
+
 1. [Download Neo4j Desktop](https://neo4j.com/download/)
 2. Install and open Neo4j Desktop.
 3. Create a new DB by clicking "New Graph", and clicking "create local graph".
 4. Set password to "letmein" (as suggested by `api/.env`), and click "Create".
 5. Make sure that the default credentials in `api/.env` are used. Leave them as follows: `NEO4J_URI=bolt://localhost:7687 NEO4J_USER=neo4j NEO4J_PASSWORD=letmein`
-6.  Click "Manage".
+6. Click "Manage".
 7. Click "Plugins".
 8. Find "APOC" and click "Install".
 9. Click the "play" button at the top of left the screen, which should start the server. _(screenshot 2)_
@@ -32,14 +80,15 @@ A good tutorial can be found here: https://www.youtube.com/watch?v=rPC71lUhK_I
 
 ### [`/api`](./api)
 
-*Install dependencies*
+_Install dependencies_
 
 ```
 (cd ./ui && npm install)
 (cd ./api && npm install)
 ```
 
-*Start API server*
+_Start API server_
+
 ```
 cd ./api && npm start
 ```
@@ -50,12 +99,11 @@ cd ./api && npm start
 
 This will start the GraphQL API in the foreground, so in another terminal session start the UI development server:
 
-*Start UI server*
+_Start UI server_
+
 ```
 cd ./ui && npm start
 ```
-
-![](ui/img/default-app.png)
 
 See [the project releases](https://github.com/grand-stack/grand-stack-starter/releases) for the changelog.
 
@@ -86,6 +134,7 @@ now secret add NEO4J_PASSWORD <YOUR_DATABASE_USER_PASSWORD_HERE>
 To use docker-compose to quickly start please make the following changes
 
 api/.env:
+
 ```
 NEO4J_URI=bolt://neo4j:7687
 NEO4J_USER=neo4j
@@ -95,15 +144,16 @@ GRAPHQL_URI=http://api:4000
 ```
 
 Now you can quickly start via:
+
 ```
 docker-compose up -d
 ```
 
 If you want to load the example DB after the services have been started:
+
 ```
 docker-compose run api npm run seedDb
 ```
-
 
 This project is licensed under the Apache License v2.
 Copyright (c) 2018 Neo4j, Inc.
