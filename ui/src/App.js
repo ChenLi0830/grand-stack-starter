@@ -46,7 +46,7 @@ class App extends Component {
           <Col span={12} offset={6}>
             <Search
               placeholder="input search text"
-              onSearch={value => this.onSearch(value)}
+              onSearch={this.onSearch}
               enterButton
             />
           </Col>
@@ -54,7 +54,10 @@ class App extends Component {
 
         <Row>
           <Col>
-            <ForceGraph searchText={this.state.searchText} />
+            <ForceGraph
+              searchText={this.state.searchText}
+              handleSearch={this.onSearch}
+            />
           </Col>
         </Row>
       </React.Fragment>
