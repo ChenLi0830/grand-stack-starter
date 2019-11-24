@@ -2,6 +2,10 @@
 
 This monorepo is started from `GRANDstack Starter`. If there is anything unclear about the dependency install / service start, you can get more details by visiting their [official README](https://github.com/grand-stack/grand-stack-starter).
 
+## Proof of concept:
+
+![](./ui/img/pof.gif)
+
 ## DEV - GraphQL Server
 
 1. Setup local Neo4J database (port: 7687, password: letmein), if you haven't done so already, seed the database using `graph.db.dump`.
@@ -42,9 +46,7 @@ This monorepo is started from `GRANDstack Starter`. If there is anything unclear
    ```
 1. `cd ./ui && npm start`
 
-![](img/default-app.png)
-
----
+## ![](./ui/img/graphql.png)
 
 # Original GRANDstack Starter README
 
