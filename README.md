@@ -36,6 +36,8 @@ This monorepo is started from `GRANDstack Starter`. If there is anything unclear
    }
    ```
 
+## ![](./ui/img/graphql.png)
+
 ## DEV - UI
 
 1. Install dependencies and start server
@@ -45,8 +47,6 @@ This monorepo is started from `GRANDstack Starter`. If there is anything unclear
    npm start
    ```
 1. `cd ./ui && npm start`
-
-## ![](./ui/img/graphql.png)
 
 # Original GRANDstack Starter README
 
