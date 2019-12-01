@@ -1,4 +1,4 @@
-import { typeDefs } from "./graphql-schema";
+import { typeDefs, resolvers } from "./graphql-schema";
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
 import { v1 as neo4j } from "neo4j-driver";
@@ -19,7 +19,8 @@ const app = express();
  */
 
 const schema = makeAugmentedSchema({
-  typeDefs
+  typeDefs,
+  resolvers
 });
 
 /*
@@ -53,11 +54,11 @@ const port = process.env.GRAPHQL_LISTEN_PORT || 4001;
 const path = "/graphql";
 
 /*
-* Optionally, apply Express middleware for authentication, etc
-* This also also allows us to specify a path for the GraphQL endpoint
-*/
-server.applyMiddleware({app, path});
+ * Optionally, apply Express middleware for authentication, etc
+ * This also also allows us to specify a path for the GraphQL endpoint
+ */
+server.applyMiddleware({ app, path });
 
-app.listen({port, path}, () => {
+app.listen({ port, path }, () => {
   console.log(`GraphQL server ready at http://localhost:${port}${path}`);
 });

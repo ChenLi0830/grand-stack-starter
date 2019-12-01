@@ -1,15 +1,36 @@
+# Neo4J stored data type - Address
 type Address {
   _id: String
   address: String!
   amount_received: Float
   sendTo: [Address] @relation(name: "Transaction", direction: OUT)
   receiveFrom: [Address] @relation(name: "Transaction", direction: IN)
+  description: String # example for fields retrieved on the fly (not saved in DB)
 }
 
+# Neo4J stored data type - User
 type User {
   _id: String
   cluster_id: String!
   amount_received: Float
   sendTo: [User] @relation(name: "Transaction", direction: OUT)
   receiveFrom: [User] @relation(name: "Transaction", direction: IN)
+  fullName: String
+}
+
+# Customized type example that represents the users registered this app
+type AppUser {
+  id: String!
+  username: String
+  lastVisitedAt: String
+  searchHistory: [String]
+  # ...other userSettings
+}
+
+# Customized mutation examples
+type Mutation {
+  # synchronous example - calculate the square of the input number
+  Square(number: Float): Float
+  # async example - save user search history
+  AppendSearchHistory(userId: String!, searchTerm: String): AppUser
 }
