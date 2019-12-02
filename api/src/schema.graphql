@@ -1,21 +1,53 @@
+# Neo4J stored edge type - Transaction
+type AddressTransaction @relation(name: "Transaction") {
+  _id: String
+  from: Address
+  to: Address
+  number_of_transactions: Int
+}
+
+# Neo4J stored edge type - Transaction
+type UserTransaction @relation(name: "Transaction") {
+  _id: String
+  from: User
+  to: User
+  number_of_transactions: Int
+}
+
 # Neo4J stored data type - Address
 type Address {
-  _id: String
   address: String!
   amount_received: Float
-  sendTo: [Address] @relation(name: "Transaction", direction: OUT)
-  receiveFrom: [Address] @relation(name: "Transaction", direction: IN)
   description: String # example for fields retrieved on the fly (not saved in DB)
+  transactions: [AddressTransaction]
 }
 
 # Neo4J stored data type - User
 type User {
-  _id: String
-  cluster_id: String!
+  cluster_id: Int!
   amount_received: Float
-  sendTo: [User] @relation(name: "Transaction", direction: OUT)
-  receiveFrom: [User] @relation(name: "Transaction", direction: IN)
+  transactions: [UserTransaction]
   fullName: String
+}
+
+# Transaction type used in custom query - getAddressesByTransactionId
+type AddressByTransaction {
+  transactionId: String
+  numberOfTransactions: Int
+  fromNodeAddress: String
+  fromNodeAmountReceived: Float
+  toNodeAddress: String
+  toNodeAmountReceived: Float
+}
+
+# Transaction type used in custom query - getUsersByTransactionId
+type UserByTransaction {
+  transactionId: String
+  numberOfTransactions: Int
+  fromNodeClusterId: String
+  fromNodeAmountReceived: Float
+  toNodeClusterId: String
+  toNodeAmountReceived: Float
 }
 
 # Customized type example that represents the users registered this app
@@ -33,4 +65,39 @@ type Mutation {
   Square(number: Float): Float
   # async example - save user search history
   AppendSearchHistory(userId: String!, searchTerm: String): AppUser
+}
+
+# Customized query examples
+type Query {
+  getAddressesByTransactionId(transactionId: Int!): AddressByTransaction
+    @cypher(
+      statement: """
+      MATCH (a1:Address) - [t:Transaction] -> (a2:Address)
+      WHERE id(t) = $transactionId
+      RETURN {
+        transactionId: id(t),
+        numberOfTransactions: t.number_of_transactions,
+        fromNodeAddress: a1.address,
+        fromNodeAmountReceived: a1.amount_received,
+        toNodeAddress: a2.address,
+        toNodeAmountReceived: a2.amount_received
+      }
+      """
+    )
+
+  getUsersByTransactionId(transactionId: Int!): UserByTransaction
+    @cypher(
+      statement: """
+      MATCH (u1:User) - [t:Transaction] -> (u2:User)
+      WHERE id(t) = $transactionId
+      RETURN {
+        transactionId: id(t),
+        numberOfTransactions: t.number_of_transactions,
+        fromNodeClusterId: u1.cluster_id,
+        fromNodeAmountReceived: u1.amount_received,
+        toNodeClusterId: u2.cluster_id,
+        toNodeAmountReceived: u2.amount_received
+      }
+      """
+    )
 }

@@ -20,7 +20,15 @@ const app = express();
 
 const schema = makeAugmentedSchema({
   typeDefs,
-  resolvers
+  resolvers,
+  config: {
+    query: {
+      exclude: ["AddressByTransaction", "UserByTransaction", "AppUser"]
+    },
+    mutation: {
+      exclude: ["AddressByTransaction", "UserByTransaction", "AppUser"]
+    }
+  }
 });
 
 /*
