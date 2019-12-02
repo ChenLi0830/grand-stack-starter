@@ -49,6 +49,22 @@ This monorepo is started from `GRANDstack Starter`. If there is anything unclear
 
 ![](./ui/img/graphql.png)
 
+## GraphQL Server 开发细节
+
+下面部分假设已经了解了 GraphQL 和 Neo4J 的概念，为什么要用它们，以及常见术语。具体信息可以参考下面的链接。
+
+1. [为什么用 GraphQL](https://dzone.com/refcardz/an-overview-of-graphql?chapter=1)
+1. [Apollo Server](https://www.apollographql.com/docs/apollo-server/)（GraphQL Server 实现）
+1. [GraphQL+Neo4J](https://egghead.io/courses/build-a-neo4j-graphql-api)
+
+文件解释：
+包含主要商务逻辑的文件
+
+- [api/src/schema.graphql](api/src/schema.graphql) - 定义 GraphQL type 的文件，其中包括 Neo4J 数据库中映射过来的 type，以及一些自定义的 type 样例。[参考文档](https://grandstack.io/docs/guide-graphql-schema-design.html)
+- [api/src/mutations.js](api/src/mutations.js) - 自定义的 mutations，可以用来添加复杂逻辑。与 schema.graphql 配合使用。
+- [api/src/graphql-schema.js](api/src/graphql-schema.js) - 定义 GraphQL resolvers
+- [api/src/index.js](api/src/index.js) - 配置 ApolloServer 和 GraphQL schema
+
 ## GraphQL queries 样例
 
 下面的 queries 可以直接粘贴到 http://localhost:4001/graphql 里测试和使用
@@ -210,19 +226,3 @@ GraphQL variables that works with the queries above:
   "transactionId": 27657
 }
 ```
-
-## GraphQL Server 开发细节
-
-下面部分假设已经了解了 GraphQL 和 Neo4J 的概念，为什么要用它们，以及常见术语。具体信息可以参考下面的链接。
-
-1. [为什么用 GraphQL](https://dzone.com/refcardz/an-overview-of-graphql?chapter=1)
-1. [Apollo Server](https://www.apollographql.com/docs/apollo-server/)（GraphQL Server 实现）
-1. [GraphQL+Neo4J](https://egghead.io/courses/build-a-neo4j-graphql-api)
-
-文件解释：
-包含主要商务逻辑的文件
-
-- [api/src/schema.graphql](api/src/schema.graphql) - 定义 GraphQL type 的文件，其中包括 Neo4J 数据库中映射过来的 type，以及一些自定义的 type 样例。[参考文档](https://grandstack.io/docs/guide-graphql-schema-design.html)
-- [api/src/mutations.js](api/src/mutations.js) - 自定义的 mutations，可以用来添加复杂逻辑。与 schema.graphql 配合使用。
-- [api/src/graphql-schema.js](api/src/graphql-schema.js) - 定义 GraphQL resolvers
-- [api/src/index.js](api/src/index.js) - 配置 ApolloServer 和 GraphQL schema
