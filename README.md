@@ -16,146 +16,213 @@ This monorepo is started from `GRANDstack Starter`. If there is anything unclear
    npm install
    npm start
    ```
-1. Visit http://localhost:4001/graphql/.
+1. Visit GraphiQL web app http://localhost:4001/graphql/.
 1. Copy & Paste the following query to verify it's working.
    ```graphql
    query queryUserById {
-     User(_id: "29850") {
+     User(_id: "24767") {
        _id
        cluster_id
        amount_received
-       sendTo {
-         cluster_id
-         amount_received
-       }
-       receiveFrom {
-         cluster_id
-         amount_received
+       transactions {
+         from {
+           number_of_transactions
+           User {
+             _id
+             cluster_id
+             amount_received
+           }
+         }
+         to {
+           _id
+           number_of_transactions
+           User {
+             _id
+             cluster_id
+             amount_received
+           }
+         }
        }
      }
    }
    ```
 
-## ![](./ui/img/graphql.png)
+![](./ui/img/graphql.png)
 
-## DEV - UI
+## GraphQL queries 样例
 
-1. Install dependencies and start server
-   ```
-   cd ./ui
-   npm install
-   npm start
-   ```
-1. `cd ./ui && npm start`
+下面的 queries 可以直接粘贴到 http://localhost:4001/graphql 里测试和使用
 
-# Original GRANDstack Starter README
+```graphql
+query getAddressesByTransactionId($transactionId: Int!) {
+  getAddressesByTransactionId(transactionId: $transactionId) {
+    transactionId
+    numberOfTransactions
+    fromNodeAddress
+    fromNodeAmountReceived
+    toNodeAddress
+    toNodeAmountReceived
+  }
+}
 
-This project is a starter for building a [GRANDstack](https://grandstack.io) (GraphQL, React, Apollo, Neo4j Database) application. There are two components to the starter, the UI application (a React app) and the API app (GraphQL server).
+query getUsersByTransactionId($transactionId: Int!) {
+  getUsersByTransactionId(transactionId: $transactionId) {
+    transactionId
+    numberOfTransactions
+    fromNodeClusterId
+    fromNodeAmountReceived
+    toNodeClusterId
+    toNodeAmountReceived
+  }
+}
 
-[![Hands On With The GRANDstack Starter](http://img.youtube.com/vi/rPC71lUhK_I/0.jpg)](http://www.youtube.com/watch?v=rPC71lUhK_I "Hands On With The GRANDstack Starter")
+mutation calcSquare {
+  Square(number: 5)
+}
 
-## Quickstart
+mutation AppendSearchHistory {
+  AppendSearchHistory(userId: "1498302", searchTerm: "dogecoin") {
+    id
+    username
+    lastVisitedAt
+    searchHistory
+  }
+}
 
-### Neo4j
+query listAddresses {
+  Address {
+    _id
+    address
+    amount_received
+  }
+}
 
-You need a Neo4j instance, e.g. a [Neo4j Sandbox](http://neo4j.com/sandbox), a local instance via [Neo4j Desktop](https://neo4j.com/download), [Docker](http://hub.docker.com/_/neo4j) or a [Neo4j instance on AWS, Azure or GCP](http://neo4j.com/developer/guide-cloud-deployment) or [Neo4j Cloud](http://neo4j.com/cloud)
+query fetchAddress($address: String) {
+  Address(address: $address) {
+    _id
+    address
+    amount_received
+    description
+    transactions {
+      from {
+        number_of_transactions
+        Address {
+          _id
+          address
+          amount_received
+          transactions {
+            from {
+              _id
+              number_of_transactions
+              Address {
+                address
+                amount_received
+              }
+            }
+          }
+        }
+      }
+      to {
+        number_of_transactions
+        Address {
+          _id
+          address
+          amount_received
+          transactions {
+            to {
+              _id
+              number_of_transactions
+              Address {
+                address
+                amount_received
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
-For schemas using the `@cypher` directive (as in this repo) via [`neo4j-graphql-js`](https://github.com/neo4j-graphql/neo4j-graphql-js), you need to have the [APOC library](https://github.com/neo4j-contrib/neo4j-apoc-procedures) installed, which should be automatic in Sandbox, Cloud and is a single click install in Neo4j Desktop. If when using the Sandbox / cloud you encounter an issue where an error similar to `Can not be converted to long: org.neo4j.kernel.impl.core.NodeProxy, Location: [object Object], Path: users` appears in the console when running the React app, try installing and using Neo4j locally instead.
+query queryUserById($userId: String) {
+  User(_id: $userId) {
+    _id
+    cluster_id
+    amount_received
+    transactions {
+      from {
+        number_of_transactions
+        User {
+          _id
+          cluster_id
+          amount_received
+        }
+      }
+      to {
+        _id
+        number_of_transactions
+        User {
+          _id
+          cluster_id
+          amount_received
+        }
+      }
+    }
+  }
+}
 
-#### Sandbox setup
-
-A good tutorial can be found here: https://www.youtube.com/watch?v=rPC71lUhK_I
-
-#### Local setup
-
-1. [Download Neo4j Desktop](https://neo4j.com/download/)
-2. Install and open Neo4j Desktop.
-3. Create a new DB by clicking "New Graph", and clicking "create local graph".
-4. Set password to "letmein" (as suggested by `api/.env`), and click "Create".
-5. Make sure that the default credentials in `api/.env` are used. Leave them as follows: `NEO4J_URI=bolt://localhost:7687 NEO4J_USER=neo4j NEO4J_PASSWORD=letmein`
-6. Click "Manage".
-7. Click "Plugins".
-8. Find "APOC" and click "Install".
-9. Click the "play" button at the top of left the screen, which should start the server. _(screenshot 2)_
-10. Wait until it says "RUNNING".
-11. Proceed forward with the rest of the tutorial.
-
-### [`/api`](./api)
-
-_Install dependencies_
-
+query listUsersByCluster($clusterId: Int!) {
+  User(cluster_id: $clusterId) {
+    _id
+    cluster_id
+    amount_received
+    transactions {
+      from {
+        _id
+        number_of_transactions
+        User {
+          _id
+          cluster_id
+          amount_received
+        }
+      }
+      to {
+        _id
+        number_of_transactions
+        User {
+          _id
+          cluster_id
+          amount_received
+        }
+      }
+    }
+  }
+}
 ```
-(cd ./ui && npm install)
-(cd ./api && npm install)
+
+GraphQL variables that works with the queries above:
+
+```json
+{
+  "address": "15xif4SjXiFi3NDEsmMZCfTdE9jvvVQrjU",
+  "userId": "24767",
+  "clusterId": 897,
+  "transactionId": 27657
+}
 ```
 
-_Start API server_
+## GraphQL Server 开发细节
 
-```
-cd ./api && npm start
-```
+下面部分假设已经了解了 GraphQL 和 Neo4J 的概念，为什么要用它们，以及常见术语。具体信息可以参考下面的链接。
 
-![](api/img/graphql-playground.png)
+1. [为什么用 GraphQL](https://dzone.com/refcardz/an-overview-of-graphql?chapter=1)
+1. [Apollo Server](https://www.apollographql.com/docs/apollo-server/)（GraphQL Server 实现）
+1. [GraphQL+Neo4J](https://egghead.io/courses/build-a-neo4j-graphql-api)
 
-### [`/ui`](./ui)
+文件解释：
+包含主要商务逻辑的文件
 
-This will start the GraphQL API in the foreground, so in another terminal session start the UI development server:
-
-_Start UI server_
-
-```
-cd ./ui && npm start
-```
-
-See [the project releases](https://github.com/grand-stack/grand-stack-starter/releases) for the changelog.
-
-## Deployment
-
-### Zeit Now v2
-
-Zeit Now v2 can be used with monorepos such as grand-stack-starter. [`now.json`](https://github.com/grand-stack/grand-stack-starter/blob/master/now.json) defines the configuration for deploying with Zeit Now v2.
-
-1. Set the now secrets for your Neo4j instance:
-
-```
-now secret add NEO4J_URI bolt+routing://<YOUR_NEO4J_INSTANCE_HERE>
-now secret add NEO4J_USER <YOUR_DATABASE_USERNAME_HERE>
-now secret add NEO4J_PASSWORD <YOUR_DATABASE_USER_PASSWORD_HERE>
-```
-
-2. Run `now`
-
-### Zeit Now v1
-
-1. Run `now` in `/api` and choose `package.json` when prompted.
-1. Set `REACT_APP_GRAPHQL_API` based on the API deployment URL from step 1 in `ui/.env`
-1. Run `now` in `/env` and choose `package.json` when prompted.
-
-## Docker Compose
-
-To use docker-compose to quickly start please make the following changes
-
-api/.env:
-
-```
-NEO4J_URI=bolt://neo4j:7687
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=letmein
-GRAPHQL_LISTEN_PORT=4000
-GRAPHQL_URI=http://api:4000
-```
-
-Now you can quickly start via:
-
-```
-docker-compose up -d
-```
-
-If you want to load the example DB after the services have been started:
-
-```
-docker-compose run api npm run seedDb
-```
-
-This project is licensed under the Apache License v2.
-Copyright (c) 2018 Neo4j, Inc.
+- [api/src/schema.graphql](api/src/schema.graphql) - 定义 GraphQL type 的文件，其中包括 Neo4J 数据库中映射过来的 type，以及一些自定义的 type 样例。[参考文档](https://grandstack.io/docs/guide-graphql-schema-design.html)
+- [api/src/mutations.js](api/src/mutations.js) - 自定义的 mutations，可以用来添加复杂逻辑。与 schema.graphql 配合使用。
+- [api/src/graphql-schema.js](api/src/graphql-schema.js) - 定义 GraphQL resolvers
+- [api/src/index.js](api/src/index.js) - 配置 ApolloServer 和 GraphQL schema
